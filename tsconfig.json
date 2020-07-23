@@ -1,0 +1,23 @@
+{
+  "lib": [
+    "esnext",
+    "dom"
+  ],
+  "types": [
+    "jest",
+    "node"
+  ],
+  "include": [
+    "shim.d.ts",
+    "./demo"
+  ],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@test-tools/*": [
+        "./test-tools"
+      ]
+    },
+    "jsx": "preserve"
+  },
+}
