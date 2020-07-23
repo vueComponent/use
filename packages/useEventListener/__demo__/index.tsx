@@ -4,8 +4,10 @@ export default {
     setup() {
         const count = ref(0);
         const eleRef = ref(null)
-        const removeListener = useEventListener(eleRef, "click", () => {
-            count.value++;
+        useEventListener(eleRef, {
+            type: "click", listener: () => {
+                count.value++;
+            }
         });
         return { eleRef, count };
     },

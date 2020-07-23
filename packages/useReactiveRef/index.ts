@@ -1,6 +1,6 @@
-import { ref, ComponentPublicInstance, nextTick } from "@vue/runtime-dom";
+import { ref, ComponentPublicInstance, nextTick, Ref } from "@vue/runtime-dom";
 type ElementType = HTMLElement | ComponentPublicInstance
-function useReactiveRef(isImmediate?: boolean) {
+function useReactiveRef(isImmediate?: boolean): [Ref<ElementType>, (...args: any) => void] {
     let prevEle = null as ElementType | null
     let eleRef = ref(prevEle)
     function setEle(ele: HTMLElement) {
@@ -14,6 +14,6 @@ function useReactiveRef(isImmediate?: boolean) {
             })
         }
     }
-    return { setEle, eleRef }
+    return [eleRef, setEle]
 }
 export default useReactiveRef

@@ -7,7 +7,7 @@ describe('useEventListener', () => {
     test('should work with custom eventListener and remove eventListener', async () => {
         const clickFn = jest.fn(() => { })
         const eleRef = ref(null)
-        const removeListener = useEventListener(eleRef, "click", clickFn);
+        const removeListener = useEventListener(eleRef, { type: "click", listener: clickFn });
         const wrapper = shallowMount({
             setup() {
                 return { eleRef };

@@ -5,7 +5,7 @@ import { ref } from "@vue/runtime-dom"
 
 describe('useReactiveRef', () => {
     test('should work with custom event', async () => {
-        const { setEle, eleRef } = useReactiveRef()
+        const [eleRef, setEle] = useReactiveRef()
         const showH1 = ref(false)
         const wrapper = shallowMount({
             setup() {
