@@ -1,9 +1,9 @@
-import { ref, Ref, Component } from "vue";
+import { ref, Component } from "vue";
 import useHover from "../index";
 export default {
   setup() {
     const eleRef = ref(null);
-    let { isHover } = useHover(eleRef, {
+    let [isHover] = useHover(eleRef, {
       onEnter: () => {
         console.log("enter");
       }

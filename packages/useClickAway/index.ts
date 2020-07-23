@@ -19,12 +19,12 @@ export default function useClickAway(
         }
         onClickAway(e)
     }
-    let removeListener!:((...args:any)=>any)
+    let removeListener!: ((...args: any) => any)
     if (isRef(container)) {
-        removeListener =useEventListener(container, eventName, onClickAwayFn)
+        removeListener = useEventListener(container, { type: eventName, listener: onClickAwayFn })
     } else {
         container.addEventListener(eventName, onClickAwayFn)
-        removeListener = ()=>{container.removeEventListener(eventName,onClickAwayFn)}
+        removeListener = () => { container.removeEventListener(eventName, onClickAwayFn) }
     }
     return removeListener
 }

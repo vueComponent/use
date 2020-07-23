@@ -9,7 +9,7 @@ describe('useHover', () => {
         const wrapper = shallowMount({
             setup() {
                 const eleRef = ref(null)
-                let { isHover } = useHover(eleRef, {
+                let [isHover] = useHover(eleRef, {
                     onEnter,
                     onLeave
                 });
