@@ -1,1 +1,1 @@
-export default ['useHover', 'useToggle', 'useClickAway', 'useEventListener', 'useReactiveRef']
+export default ['useHover', 'useToggle', 'useClickAway', 'useEventListener', 'useReactiveRef', 'useScroll']
