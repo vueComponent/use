@@ -1,6 +1,9 @@
 import { watch, Ref } from "vue";
 function useEventListener(bindEle: Ref<HTMLElement | Document | Window>, option: { type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions }) {
     const { type, listener, options } = option
+    if (bindEle?.value) {
+        bindEle.value.addEventListener(type, listener, options)
+    }
     const destroyWatcher = watch(bindEle, (ele, prevEle) => {
         if (ele) {
             ele.addEventListener(type, listener, options)
