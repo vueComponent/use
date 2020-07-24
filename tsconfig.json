@@ -9,9 +9,12 @@
   ],
   "include": [
     "shim.d.ts",
-    "./demo"
+    "./demo",
+    "./packages"
   ],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
     "baseUrl": ".",
     "paths": {
       "@test-tools/*": [

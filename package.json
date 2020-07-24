@@ -2,7 +2,8 @@
   "name": "vhooks",
   "scripts": {
     "dev": "webpack-dev-server",
-    "test": "jest"
+    "test": "jest",
+    "test-coverage": "jest --coverage"
   },
   "dependencies": {
     "@vue/runtime-dom": "^3.0.0-rc.1"
