@@ -23,7 +23,6 @@ function useToggle<D extends IState = IState, R extends IState = IState>(
     reverseValue = reverseValue === undefined ? !defaultValue : reverseValue
     let stateRef = ref(defaultValue as any)
     function toggle(value?: D | R) {
-        debugger
         if (value === undefined) {
             stateRef.value = stateRef.value === defaultValue ? reverseValue : defaultValue
             return
