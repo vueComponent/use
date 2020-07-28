@@ -9,9 +9,10 @@ describe('useScroll', () => {
         if (document.body) {
             document.body.appendChild(elem)
         }
-        const scroll = useScroll(ref(elem))
+        let scroll
         const wrapper = mount({
             setup() {
+                scroll = useScroll(ref(elem))
                 return {}
             },
             render() {

@@ -8,9 +8,10 @@ describe('useClickAway', () => {
         const fn = jest.fn(() => { })
         const eleRef = ref(null)
         const wrapRef = ref(null)
-        const removeListener = useClickAway(eleRef, fn,'click',wrapRef);
+        let removeListener!: () => void
         const wrapper = mount({
             setup() {
+                removeListener = useClickAway(eleRef, fn, 'click', wrapRef);
                 return { eleRef, wrapRef };
             },
             render(_ctx) {
@@ -23,7 +24,7 @@ describe('useClickAway', () => {
 
             }
         });
-        await wrapper.vm.$nextTick() 
+        await wrapper.vm.$nextTick()
         wrapper.find('h1').trigger('click')
         expect(fn).toHaveBeenCalledTimes(0);
         wrapper.find('h2').trigger('click')
