@@ -1,4 +1,4 @@
-import { Ref, isRef, watch } from "vue";
+import { Ref, isRef } from "vue";
 import useEventListener from "../useEventListener";
 // 鼠标点击事件，click 不会监听右键
 const defaultEvent = 'click';

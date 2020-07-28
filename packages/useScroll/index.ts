@@ -1,4 +1,4 @@
-import { Ref, ref, watch, watchEffect, WatchOptions, isRef } from "vue";
+import { Ref, ref, isRef } from "vue";
 import useEventListener from "../useEventListener";
 interface Position {
     left: number;
@@ -6,7 +6,7 @@ interface Position {
 }
 export default function useScroll(target: Ref<HTMLElement | Document | Window> | HTMLElement | Document | Window) {
     const position = ref({ left: 0, top: 0 } as Position)
-    const isRefValue = isRef(target)
+    const eleIsRef = isRef(target)
     const updatePosition = (currentTarget: HTMLElement | Document) => {
         let newPosition;
         if (currentTarget === document) {
@@ -27,10 +27,8 @@ export default function useScroll(target: Ref<HTMLElement | Document | Window> |
         if (!event.target) return;
         updatePosition(event.target as HTMLElement | Document);
     }
-    if (isRefValue) {
-        watchEffect(() => {
-            useEventListener(target as Ref<HTMLElement | Document | Window>, { type: 'scroll', listener })
-        }, { flush: 'post' })
+    if (eleIsRef) {
+        useEventListener(target as Ref<HTMLElement | Document | Window>, { type: 'scroll', listener })
     } else {
         (target as HTMLElement | Document | Window).addEventListener('scroll', listener)
     }
