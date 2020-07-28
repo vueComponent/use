@@ -1,12 +1,11 @@
-import { Ref, ref, isRef } from "vue";
+import { Ref, ref } from "vue";
 import useEventListener from "../useEventListener";
 interface Position {
     left: number;
     top: number;
 }
-export default function useScroll(target: Ref<HTMLElement | Document | Window> | HTMLElement | Document | Window) {
+export default function useScroll(target: Ref<HTMLElement | Document | Window>) {
     const position = ref({ left: 0, top: 0 } as Position)
-    const eleIsRef = isRef(target)
     const updatePosition = (currentTarget: HTMLElement | Document) => {
         let newPosition;
         if (currentTarget === document) {
@@ -27,11 +26,8 @@ export default function useScroll(target: Ref<HTMLElement | Document | Window> |
         if (!event.target) return;
         updatePosition(event.target as HTMLElement | Document);
     }
-    if (eleIsRef) {
-        useEventListener(target as Ref<HTMLElement | Document | Window>, { type: 'scroll', listener })
-    } else {
-        (target as HTMLElement | Document | Window).addEventListener('scroll', listener)
-    }
+    useEventListener(target as Ref<HTMLElement | Document | Window>, { type: 'scroll', listener })
+
 
     return position
 }   

@@ -6,14 +6,13 @@ const defaultEvent = 'click';
 type EventType = MouseEvent | TouchEvent;
 
 export default function useClickAway(
-    ele: HTMLElement | Ref<HTMLElement>,
+    ele: Ref<HTMLElement>,
     onClickAway: (event: EventType) => void,
     eventName: string = defaultEvent,
     container: Document | HTMLElement | Ref<HTMLElement> = document
 ) {
-    const eleIsRef = isRef(ele)
     function onClickAwayFn(e: any) {
-        let dom = eleIsRef ? (ele as Ref<HTMLElement>).value : (ele as HTMLElement)
+        let dom = ele.value
         if (!dom || dom.contains(e.target)) {
             return
         }
