@@ -1,1 +1,10 @@
-export default ['useHover', 'useToggle', 'useClickAway', 'useEventListener', 'useReactiveRef', 'useScroll', 'useInViewport']
+export default [
+	'useSelected',
+	'useHover',
+	'useToggle',
+	'useClickAway',
+	'useEventListener',
+	'useReactiveRef',
+	'useScroll',
+	'useInViewport'
+];
