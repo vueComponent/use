@@ -1,15 +1,16 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import list from "./compoentList";
+import list from "./componentList";
 export default createRouter({
-    history: createWebHashHistory(),
-    strict: true,
-    routes: [{ path: '/home', redirect: '/' },
+  history: createWebHashHistory(),
+  strict: true,
+  routes: [
+    { path: "/home", redirect: "/" },
     ...list.map((componentName) => {
-        return {
-            path: `/${componentName}`,
-            component: () => import(`../packages/${componentName}/__demo__/index.tsx`),
-        }
-    }
-    )
-    ]
-})
+      return {
+        path: `/${componentName}`,
+        component: () =>
+          import(`../packages/${componentName}/__demo__/index.tsx`),
+      };
+    }),
+  ],
+});
