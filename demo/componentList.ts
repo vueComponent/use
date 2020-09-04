@@ -1,4 +1,5 @@
 export default [
+  "useForm",
   "useSize",
   "useHover",
   "useToggle",
