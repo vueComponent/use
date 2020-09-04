@@ -1,5 +1,10 @@
 {
-  "name": "vhooks",
+  "name": "@ant-design-vue/use",
+  "version": "0.0.1-alpha.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vueComponent/use.git"
+  },
   "scripts": {
     "dev": "webpack-dev-server",
     "test": "jest",
