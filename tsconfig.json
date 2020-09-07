@@ -1,26 +1,23 @@
 {
-  "lib": [
-    "esnext",
-    "dom"
-  ],
-  "types": [
-    "jest",
-    "node"
-  ],
-  "include": [
-    "shim.d.ts",
-    "./demo",
-    "./packages"
-  ],
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "CommonJS",
-    "baseUrl": ".",
-    "paths": {
-      "@test-tools/*": [
-        "./test-tools"
-      ]
-    },
-    "jsx": "preserve"
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "jsx": "preserve",
+    "esModuleInterop": true
   },
+  "include": ["./src", "./typings/"],
+  "exclude": [
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts",
+    "tslint:latest",
+    "tslint-config-prettier"
+  ]
 }

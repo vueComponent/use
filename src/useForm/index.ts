@@ -4,10 +4,10 @@ import { validateRules } from "ant-design-vue/es/form/utils/validateUtil";
 import { defaultValidateMessages } from "ant-design-vue/es/form/utils/messages";
 import { allPromiseFinish } from "ant-design-vue/es/form/utils/asyncUtil";
 
-function isRequired(rules) {
+function isRequired(rules: any[]) {
   let isRequired = false;
   if (rules && rules.length) {
-    rules.every((rule) => {
+    rules.every((rule: { required: any }) => {
       if (rule.required) {
         isRequired = true;
         return false;
@@ -73,7 +73,7 @@ function useForm(
               name,
               errors: [],
             }))
-            .catch((errors) =>
+            .catch((errors: any) =>
               Promise.reject({
                 name,
                 errors,
@@ -92,9 +92,9 @@ function useForm(
         }
         return Promise.reject([]);
       })
-      .catch((results) => {
+      .catch((results: any[]) => {
         const errorList = results.filter(
-          (result) => result && result.errors.length
+          (result: { errors: string | any[] }) => result && result.errors.length
         );
         return Promise.reject({
           values: toRaw(model),
@@ -104,11 +104,16 @@ function useForm(
       });
 
     // Do not throw in console
-    returnPromise.catch((e) => e);
+    returnPromise.catch((e: any) => e);
 
     return returnPromise;
   };
-  const validateField = (name, value, rules, option) => {
+  const validateField = (
+    name: string,
+    value: any,
+    rules: any,
+    option: object
+  ) => {
     const promise = validateRules(
       [name],
       value,
@@ -121,7 +126,7 @@ function useForm(
     );
     validateInfo[name].validateStatus = "validating";
     promise
-      .catch((e) => e)
+      .catch((e: any) => e)
       .then((errors = []) => {
         if (validateInfo[name].validateStatus === "validating") {
           validateInfo[name].validateStatus = errors.length

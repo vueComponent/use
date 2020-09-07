@@ -27,7 +27,7 @@ export default {
         },
       ],
     });
-    let { resetFields, validateFields, validateInfo } = useForm(
+    const { resetFields, validateFields, validateInfo } = useForm(
       modelRef,
       rulesRef
       // { immediate: true }
