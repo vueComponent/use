@@ -1,9 +1,7 @@
-import { shallowMount } from '@vue/test-utils';
-import { ref, Ref } from "@vue/runtime-dom"
-import useInViewport from '../index';
+import useInViewport from "../index";
 
-describe('useInViewport', () => {
-  it('should be defined', () => {
+describe("useInViewport", () => {
+  it("should be defined", () => {
     expect(useInViewport).toBeDefined();
   });
   // it('with argument', async () => {

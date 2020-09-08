@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "webpack-dev-server",
     "test": "jest",
-    "lint": "vc-tools run lint",
+    "lint": "eslint src/ --ext .tsx,.ts",
     "compile": "vc-tools run compile",
     "test-coverage": "jest --coverage"
   },
@@ -30,8 +30,8 @@
     "@typescript-eslint/parser": "^3.5.0",
     "@vue/babel-plugin-jsx": "^1.0.0-rc.2",
     "@vue/compiler-sfc": "^3.0.0-0",
-    "@vue/test-utils": "^2.0.0-beta.0",
-    "ant-design-vue": "^2.0.0-beta.5",
+    "@vue/test-utils": "^2.0.0-beta.3",
+    "ant-design-vue": "^2.0.0-beta.8",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",

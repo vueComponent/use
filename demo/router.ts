@@ -8,8 +8,7 @@ export default createRouter({
     ...list.map((componentName) => {
       return {
         path: `/${componentName}`,
-        component: () =>
-          import(`../packages/${componentName}/__demo__/index.tsx`),
+        component: () => import(`../src/${componentName}/__demo__/index.tsx`),
       };
     }),
   ],

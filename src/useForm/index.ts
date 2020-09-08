@@ -25,7 +25,7 @@ export interface Props {
 function useForm(
   modelRef: Props,
   rulesRef?: Props,
-  options?: { immediate?: boolean }
+  options?: { immediate?: boolean; deep?: boolean }
 ): {
   modelRef: Props;
   rulesRef: Props;
@@ -112,7 +112,7 @@ function useForm(
     name: string,
     value: any,
     rules: any,
-    option: object
+    option: { validateFirst?: boolean }
   ) => {
     const promise = validateRules(
       [name],
