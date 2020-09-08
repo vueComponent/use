@@ -1,5 +1,6 @@
 import { reactive, watch, toRaw, nextTick } from '@vue/runtime-dom';
 import cloneDeep from 'lodash-es/cloneDeep';
+import intersection from 'lodash-es/intersection';
 import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
 import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
 import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
@@ -18,9 +19,74 @@ function isRequired(rules: any[]) {
   return isRequired;
 }
 
+function toArray(value) {
+  if (value === undefined || value === null) {
+    return [];
+  }
+
+  return Array.isArray(value) ? value : [value];
+}
+
+type ValidateMessage = string | (() => string);
+export interface ValidateMessages {
+  default?: ValidateMessage;
+  required?: ValidateMessage;
+  enum?: ValidateMessage;
+  whitespace?: ValidateMessage;
+  date?: {
+    format?: ValidateMessage;
+    parse?: ValidateMessage;
+    invalid?: ValidateMessage;
+  };
+  types?: {
+    string?: ValidateMessage;
+    method?: ValidateMessage;
+    array?: ValidateMessage;
+    object?: ValidateMessage;
+    number?: ValidateMessage;
+    date?: ValidateMessage;
+    boolean?: ValidateMessage;
+    integer?: ValidateMessage;
+    float?: ValidateMessage;
+    regexp?: ValidateMessage;
+    email?: ValidateMessage;
+    url?: ValidateMessage;
+    hex?: ValidateMessage;
+  };
+  string?: {
+    len?: ValidateMessage;
+    min?: ValidateMessage;
+    max?: ValidateMessage;
+    range?: ValidateMessage;
+  };
+  number?: {
+    len?: ValidateMessage;
+    min?: ValidateMessage;
+    max?: ValidateMessage;
+    range?: ValidateMessage;
+  };
+  array?: {
+    len?: ValidateMessage;
+    min?: ValidateMessage;
+    max?: ValidateMessage;
+    range?: ValidateMessage;
+  };
+  pattern?: {
+    mismatch?: ValidateMessage;
+  };
+}
+
 export interface Props {
   [key: string]: any;
 }
+
+export interface validateOptions {
+  validateFirst?: boolean;
+  validateMessages?: ValidateMessages;
+  trigger?: 'change' | 'blur' | string | string[];
+}
+
+type namesType = string | string[];
 
 function useForm(
   modelRef: Props,
@@ -32,13 +98,13 @@ function useForm(
   initialModel: Props;
   validateInfo: Props;
   resetFields: () => void;
+  validate: (names?: string | string[], option?: validateOptions) => Promise<any>;
   validateField: (
     name?: string,
     value?: any,
     rules?: [Record<string, unknown>],
-    option?: Record<string, unknown>,
+    option?: validateOptions,
   ) => Promise<any>;
-  validateFields: (modelRef?: Props, option?: Record<string, unknown>) => Promise<any>;
 } {
   const initialModel = cloneDeep(toRaw(modelRef));
   let validateInfo = {};
@@ -60,13 +126,25 @@ function useForm(
       });
     });
   };
+  const filterRules = (rules = [], trigger: string[]) => {
+    if (!trigger.length) {
+      return rules;
+    } else {
+      return rules.filter(rule => {
+        const triggerList = toArray(rule.trigger || 'change');
+        return intersection(triggerList, trigger).length;
+      });
+    }
+  };
   let lastValidatePromise = null;
-  const validateFields = (model = modelRef, option?: Record<string, unknown>) => {
+  const validateFields = (names: string[], option?: validateOptions) => {
     const promiseList = [];
-    Object.keys(model).forEach(name => {
-      const value = model[name];
-      const rules = rulesRef[name];
-      if (rules && rules.length) {
+    const values = {};
+    names.forEach(name => {
+      const value = modelRef[name];
+      values[name] = value;
+      const rules = filterRules(rulesRef[name], toArray(option && option.trigger));
+      if (rules.length) {
         promiseList.push(
           validateField(name, value, rules, option || {})
             .then(() => ({
@@ -88,7 +166,7 @@ function useForm(
     const returnPromise = summaryPromise
       .then(() => {
         if (lastValidatePromise === summaryPromise) {
-          return Promise.resolve(toRaw(model));
+          return Promise.resolve(values);
         }
         return Promise.reject([]);
       })
@@ -97,7 +175,7 @@ function useForm(
           (result: { errors: string | any[] }) => result && result.errors.length,
         );
         return Promise.reject({
-          values: toRaw(model),
+          values: values,
           errorFields: errorList,
           outOfDate: lastValidatePromise !== summaryPromise,
         });
@@ -108,12 +186,7 @@ function useForm(
 
     return returnPromise;
   };
-  const validateField = (
-    name: string,
-    value: any,
-    rules: any,
-    option: { validateFirst?: boolean },
-  ) => {
+  const validateField = (name: string, value: any, rules: any, option: validateOptions) => {
     const promise = validateRules(
       [name],
       value,
@@ -136,12 +209,24 @@ function useForm(
     return promise;
   };
 
+  const validate = (names?: namesType, option?: validateOptions) => {
+    let keys = [];
+    if (!names) {
+      keys = Object.keys(modelRef);
+    } else if (Array.isArray(names)) {
+      keys = names;
+    } else {
+      keys = [names];
+    }
+    return validateFields(keys, option).catch((e: any) => e);
+  };
+
   watch(
     [modelRef, rulesRef],
     () => {
-      validateFields();
+      validate('', { trigger: 'change' });
     },
-    { immediate: options && !!options.immediate },
+    { immediate: options && !!options.immediate, deep: true },
   );
 
   return {
@@ -150,8 +235,8 @@ function useForm(
     initialModel,
     validateInfo,
     resetFields,
+    validate,
     validateField,
-    validateFields,
   };
 }
 

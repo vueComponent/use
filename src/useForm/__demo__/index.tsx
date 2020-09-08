@@ -19,6 +19,7 @@ export default {
           min: 3,
           max: 5,
           message: 'Length should be 3 to 5',
+          trigger: 'blur',
         },
       ],
       name2: [
@@ -28,14 +29,14 @@ export default {
         },
       ],
     });
-    const { resetFields, validateFields, validateInfo } = useForm(
+    const { resetFields, validate, validateInfo } = useForm(
       modelRef,
       rulesRef,
       // { immediate: true }
     );
     const handleClick = e => {
       e.preventDefault();
-      validateFields()
+      validate()
         .then(values => {
           console.log(values);
         })
@@ -50,7 +51,7 @@ export default {
     return () => (
       <Form>
         <Form.Item label="Activity name1" {...validateInfo.name1}>
-          <Input v-model={[modelRef.name1, 'value']} />
+          <Input v-model={[modelRef.name1, 'value']} onBlur={() => validate('name1')} />
         </Form.Item>
         <Form.Item label="Activity name2" {...validateInfo.name2}>
           <Input v-model={[modelRef.name2, 'value']} />
