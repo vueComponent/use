@@ -1,4 +1,4 @@
-import { Ref } from "vue";
+import { Ref } from 'vue';
 export type BasicTarget<T = HTMLElement> =
   | (() => T | null)
   | T
@@ -10,7 +10,7 @@ type TargetElement = HTMLElement | Document | Window | Ref;
 
 export function getTargetElement(
   target?: BasicTarget<TargetElement>,
-  defaultElement?: TargetElement
+  defaultElement?: TargetElement,
 ): TargetElement | undefined | null {
   if (!target) {
     return defaultElement;
@@ -18,7 +18,7 @@ export function getTargetElement(
 
   let targetElement: TargetElement | undefined | null;
 
-  if (typeof target === "function") {
+  if (typeof target === 'function') {
     targetElement = target();
   } else {
     targetElement = target;

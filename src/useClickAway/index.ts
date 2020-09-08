@@ -1,7 +1,7 @@
-import { Ref, isRef } from "vue";
-import useEventListener from "../useEventListener";
+import { Ref, isRef } from 'vue';
+import useEventListener from '../useEventListener';
 // 鼠标点击事件，click 不会监听右键
-const defaultEvent = "click";
+const defaultEvent = 'click';
 
 type EventType = MouseEvent | TouchEvent;
 
@@ -9,7 +9,7 @@ export default function useClickAway(
   ele: Ref<HTMLElement>,
   onClickAway: (event: EventType) => void,
   eventName: string = defaultEvent,
-  container: Document | HTMLElement | Ref<HTMLElement> = document
+  container: Document | HTMLElement | Ref<HTMLElement> = document,
 ): () => void {
   function onClickAwayFn(e: any) {
     const dom = ele.value;

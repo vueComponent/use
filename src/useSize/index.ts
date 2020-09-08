@@ -1,5 +1,5 @@
-import { Ref, reactive, onMounted, watch, ref } from "@vue/runtime-dom";
-import ResizeObserver from "resize-observer-polyfill";
+import { Ref, reactive, onMounted, watch, ref } from '@vue/runtime-dom';
+import ResizeObserver from 'resize-observer-polyfill';
 
 type Size = { width?: number; height?: number };
 
@@ -16,8 +16,8 @@ function useSize(target?: Ref<Element | Window | null>): [Size, Ref] {
       (el, preElm, onInvalidate) => {
         if (!el) return;
         resizeObserver && resizeObserver.disconnect();
-        resizeObserver = new ResizeObserver((entries) => {
-          entries.forEach((entry) => {
+        resizeObserver = new ResizeObserver(entries => {
+          entries.forEach(entry => {
             state.width = entry.target.clientWidth;
             state.height = entry.target.clientHeight;
           });
@@ -27,7 +27,7 @@ function useSize(target?: Ref<Element | Window | null>): [Size, Ref] {
           resizeObserver && resizeObserver.disconnect();
         });
       },
-      { immediate: true }
+      { immediate: true },
     );
   });
 

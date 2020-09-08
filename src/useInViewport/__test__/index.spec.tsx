@@ -1,7 +1,7 @@
-import useInViewport from "../index";
+import useInViewport from '../index';
 
-describe("useInViewport", () => {
-  it("should be defined", () => {
+describe('useInViewport', () => {
+  it('should be defined', () => {
     expect(useInViewport).toBeDefined();
   });
   // it('with argument', async () => {

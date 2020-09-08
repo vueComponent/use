@@ -1,5 +1,5 @@
-import { Component } from "vue";
-import useSize from "../index";
+import { Component } from 'vue';
+import useSize from '../index';
 export default {
   setup() {
     const [size, elRef] = useSize();

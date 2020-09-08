@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
-import { shallowMount } from "@vue/test-utils";
+import { shallowMount } from '@vue/test-utils';
 
-import useEventListener from "../index";
-import { ref } from "@vue/runtime-dom";
+import useEventListener from '../index';
+import { ref } from '@vue/runtime-dom';
 
-describe("useEventListener", () => {
-  test("should work with Ref<HTMLElement> parameter", async () => {
+describe('useEventListener', () => {
+  test('should work with Ref<HTMLElement> parameter', async () => {
     const clickFn = jest.fn(() => {});
     const eleRef = ref(null);
     let removeListener!: () => void;
     const wrapper = shallowMount({
       setup() {
         removeListener = useEventListener(eleRef, {
-          type: "click",
+          type: 'click',
           listener: clickFn,
         });
         return { eleRef };
@@ -27,20 +27,20 @@ describe("useEventListener", () => {
     });
     await wrapper.vm.$nextTick();
     expect(clickFn).toHaveBeenCalledTimes(0);
-    wrapper.find("h1").trigger("click");
+    wrapper.find('h1').trigger('click');
     expect(clickFn).toHaveBeenCalledTimes(1);
     removeListener();
-    wrapper.find("h1").trigger("click");
+    wrapper.find('h1').trigger('click');
     expect(clickFn).toHaveBeenCalledTimes(1);
   });
-  test("should work with HTMLElement parameter", async () => {
+  test('should work with HTMLElement parameter', async () => {
     const clickFn = jest.fn(() => {});
     const eleRef = ref(null);
     let removeListener!: () => void;
     const wrapper = shallowMount({
       setup() {
         removeListener = useEventListener(eleRef, {
-          type: "click",
+          type: 'click',
           listener: clickFn,
         });
         return { eleRef };
@@ -55,10 +55,10 @@ describe("useEventListener", () => {
     });
     await wrapper.vm.$nextTick();
     expect(clickFn).toHaveBeenCalledTimes(0);
-    wrapper.find("h1").trigger("click");
+    wrapper.find('h1').trigger('click');
     expect(clickFn).toHaveBeenCalledTimes(1);
     removeListener();
-    wrapper.find("h1").trigger("click");
+    wrapper.find('h1').trigger('click');
     expect(clickFn).toHaveBeenCalledTimes(1);
   });
 });

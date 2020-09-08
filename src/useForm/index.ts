@@ -1,8 +1,8 @@
-import { reactive, watch, toRaw, nextTick } from "@vue/runtime-dom";
-import cloneDeep from "lodash-es/cloneDeep";
-import { validateRules } from "ant-design-vue/es/form/utils/validateUtil";
-import { defaultValidateMessages } from "ant-design-vue/es/form/utils/messages";
-import { allPromiseFinish } from "ant-design-vue/es/form/utils/asyncUtil";
+import { reactive, watch, toRaw, nextTick } from '@vue/runtime-dom';
+import cloneDeep from 'lodash-es/cloneDeep';
+import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
+import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
+import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
 
 function isRequired(rules: any[]) {
   let isRequired = false;
@@ -25,7 +25,7 @@ export interface Props {
 function useForm(
   modelRef: Props,
   rulesRef?: Props,
-  options?: { immediate?: boolean; deep?: boolean }
+  options?: { immediate?: boolean; deep?: boolean },
 ): {
   modelRef: Props;
   rulesRef: Props;
@@ -35,14 +35,14 @@ function useForm(
   validateField: (
     name?: string,
     value?: any,
-    rules?: [object],
-    option?: object
+    rules?: [Record<string, unknown>],
+    option?: Record<string, unknown>,
   ) => Promise<any>;
-  validateFields: (modelRef?: Props, option?: object) => Promise<any>;
+  validateFields: (modelRef?: Props, option?: Record<string, unknown>) => Promise<any>;
 } {
   const initialModel = cloneDeep(toRaw(modelRef));
   let validateInfo = {};
-  Object.keys(initialModel).forEach((key) => {
+  Object.keys(initialModel).forEach(key => {
     validateInfo[key] = {
       autoLink: false,
       required: isRequired(rulesRef[key]),
@@ -52,7 +52,7 @@ function useForm(
   const resetFields = () => {
     Object.assign(modelRef, initialModel);
     nextTick(() => {
-      Object.keys(validateInfo).forEach((key) => {
+      Object.keys(validateInfo).forEach(key => {
         validateInfo[key] = {
           autoLink: false,
           required: isRequired(rulesRef[key]),
@@ -61,9 +61,9 @@ function useForm(
     });
   };
   let lastValidatePromise = null;
-  const validateFields = (model = modelRef, option?: object) => {
+  const validateFields = (model = modelRef, option?: Record<string, unknown>) => {
     const promiseList = [];
-    Object.keys(model).forEach((name) => {
+    Object.keys(model).forEach(name => {
       const value = model[name];
       const rules = rulesRef[name];
       if (rules && rules.length) {
@@ -77,8 +77,8 @@ function useForm(
               Promise.reject({
                 name,
                 errors,
-              })
-            )
+              }),
+            ),
         );
       }
     });
@@ -94,7 +94,7 @@ function useForm(
       })
       .catch((results: any[]) => {
         const errorList = results.filter(
-          (result: { errors: string | any[] }) => result && result.errors.length
+          (result: { errors: string | any[] }) => result && result.errors.length,
         );
         return Promise.reject({
           values: toRaw(model),
@@ -112,7 +112,7 @@ function useForm(
     name: string,
     value: any,
     rules: any,
-    option: { validateFirst?: boolean }
+    option: { validateFirst?: boolean },
   ) => {
     const promise = validateRules(
       [name],
@@ -122,16 +122,14 @@ function useForm(
         validateMessages: defaultValidateMessages,
         ...option,
       },
-      !!option.validateFirst
+      !!option.validateFirst,
     );
-    validateInfo[name].validateStatus = "validating";
+    validateInfo[name].validateStatus = 'validating';
     promise
       .catch((e: any) => e)
       .then((errors = []) => {
-        if (validateInfo[name].validateStatus === "validating") {
-          validateInfo[name].validateStatus = errors.length
-            ? "error"
-            : "success";
+        if (validateInfo[name].validateStatus === 'validating') {
+          validateInfo[name].validateStatus = errors.length ? 'error' : 'success';
           validateInfo[name].help = errors[0];
         }
       });
@@ -143,7 +141,7 @@ function useForm(
     () => {
       validateFields();
     },
-    { immediate: options && !!options.immediate }
+    { immediate: options && !!options.immediate },
   );
 
   return {

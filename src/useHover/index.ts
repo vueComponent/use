@@ -1,4 +1,4 @@
-import { ref, Ref, watch } from "vue";
+import { ref, Ref, watch } from 'vue';
 export interface Options {
   onEnter?: (e: MouseEvent) => void;
   onLeave?: (e: MouseEvent) => void;
@@ -17,13 +17,10 @@ type Action = {
  * @param {Options} [options]
  * @returns
  */
-function useHover(
-  target: Ref<HTMLElement>,
-  options?: Options
-): [Ref<Boolean>, Action] {
+function useHover(target: Ref<HTMLElement>, options?: Options): [Ref<boolean>, Action] {
   if (!target) {
     console.warn(
-      `fucntiuon useHover first parameter expect HTMLElement | Ref<HTMLElement>,bug got ${target}`
+      `fucntiuon useHover first parameter expect HTMLElement | Ref<HTMLElement>,bug got ${target}`,
     );
     return;
   }
@@ -44,31 +41,28 @@ function useHover(
 
   const _addListeners = (ele: HTMLElement) => {
     if (ele) {
-      ele.addEventListener("mouseenter", onMouseEnter);
-      ele.addEventListener("mouseleave", onMouseLeave);
+      ele.addEventListener('mouseenter', onMouseEnter);
+      ele.addEventListener('mouseleave', onMouseLeave);
     }
   };
   const _removeListeners = (ele: HTMLElement) => {
     if (ele) {
-      ele.removeEventListener("mouseenter", onMouseEnter);
-      ele.removeEventListener("mouseleave", onMouseLeave);
+      ele.removeEventListener('mouseenter', onMouseEnter);
+      ele.removeEventListener('mouseleave', onMouseLeave);
     }
   };
   const removelistener = () => {
     _removeListeners((target as Ref<HTMLElement>).value);
     destoryWatcher();
   };
-  const destoryWatcher = watch(
-    target as Ref<HTMLElement>,
-    (newValue, oldValue) => {
-      if (newValue) {
-        _addListeners(newValue);
-      }
-      if (oldValue) {
-        _removeListeners(oldValue);
-      }
+  const destoryWatcher = watch(target as Ref<HTMLElement>, (newValue, oldValue) => {
+    if (newValue) {
+      _addListeners(newValue);
     }
-  );
+    if (oldValue) {
+      _removeListeners(oldValue);
+    }
+  });
   return [isHovering, { actions: { removelistener } }];
 }
 

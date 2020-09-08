@@ -1,12 +1,10 @@
-import { Ref, ref } from "vue";
-import useEventListener from "../useEventListener";
+import { Ref, ref } from 'vue';
+import useEventListener from '../useEventListener';
 interface Position {
   left: number;
   top: number;
 }
-export default function useScroll(
-  target: Ref<HTMLElement | Document | Window>
-): Ref<Position> {
+export default function useScroll(target: Ref<HTMLElement | Document | Window>): Ref<Position> {
   const position = ref({ left: 0, top: 0 } as Position);
   const updatePosition = (currentTarget: HTMLElement | Document) => {
     let newPosition;
@@ -29,7 +27,7 @@ export default function useScroll(
     updatePosition(event.target as HTMLElement | Document);
   };
   useEventListener(target as Ref<HTMLElement | Document | Window>, {
-    type: "scroll",
+    type: 'scroll',
     listener,
   });
 

@@ -1,15 +1,11 @@
-import { watchEffect, Ref, isRef, onBeforeUnmount } from "vue";
+import { watchEffect, Ref, isRef, onBeforeUnmount } from 'vue';
 function useEventListener(
-  target:
-    | Ref<HTMLElement | Document | Window>
-    | HTMLElement
-    | Document
-    | Window,
+  target: Ref<HTMLElement | Document | Window> | HTMLElement | Document | Window,
   option: {
     type: string;
     listener: EventListenerOrEventListenerObject;
     options?: boolean | AddEventListenerOptions;
-  }
+  },
 ): () => void {
   const { type, listener, options } = option;
   const eleIsRef = isRef(target);
@@ -24,14 +20,14 @@ function useEventListener(
         }
         prevEle = bindEle?.value;
       },
-      { flush: "post" }
+      { flush: 'post' },
     );
-    function removeListener(isDestroyWatcher = true) {
+    const removeListener = (isDestroyWatcher = true) => {
       bindEle.value.removeEventListener(type, listener);
       if (isDestroyWatcher) {
         destroyWatcher();
       }
-    }
+    };
     onBeforeUnmount(() => {
       removeListener(true);
     });
@@ -39,9 +35,9 @@ function useEventListener(
   } else {
     const bindEle = target as HTMLElement | Document | Window;
     bindEle.addEventListener(type, listener, options);
-    function removeListener() {
+    const removeListener = () => {
       bindEle.removeEventListener(type, listener);
-    }
+    };
     onBeforeUnmount(() => {
       removeListener();
     });

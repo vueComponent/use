@@ -1,11 +1,11 @@
-import { ref, Component } from "vue";
-import useHover from "../index";
+import { ref, Component } from 'vue';
+import useHover from '../index';
 export default {
   setup() {
     const eleRef = ref(null);
     const [isHover] = useHover(eleRef, {
       onEnter: () => {
-        console.log("enter");
+        console.log('enter');
       },
     });
     return {
@@ -17,7 +17,7 @@ export default {
     return (
       <>
         <h1 ref="eleRef">move your mouse</h1>
-        <h2>{_ctx.isHover ? "enter" : "leave"}</h2>
+        <h2>{_ctx.isHover ? 'enter' : 'leave'}</h2>
       </>
     );
   },

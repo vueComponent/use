@@ -1,5 +1,5 @@
-import { Component, ref, defineComponent } from "vue";
-import useClickAway from "../index";
+import { Component, ref, defineComponent } from 'vue';
+import useClickAway from '../index';
 export default defineComponent({
   setup() {
     const count = ref(0);

@@ -1,7 +1,7 @@
-import useToggle from "../index";
+import useToggle from '../index';
 
-describe("useToggle", () => {
-  test("default", async () => {
+describe('useToggle', () => {
+  test('default', async () => {
     const [state, { toggle, setLeft, setRight }] = useToggle();
     expect(state.value).toBe(false);
     toggle();
