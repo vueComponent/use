@@ -103,7 +103,7 @@ const isArray = Array.isArray;
 const isObject = (val: any) => val !== null && typeof val === 'object';
 
 // 重置到初始数据，并尽可能的保留响应式
-function resetReactiveValue(originValue, refValues) {
+function resetReactiveValue(originValue: Props, refValues: Props) {
   for (const key of Object.keys(refValues)) {
     if (!(key in originValue)) {
       delete refValues[key];
