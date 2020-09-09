@@ -1,6 +1,7 @@
-import { reactive, watch, toRaw, nextTick } from '@vue/runtime-dom';
+import { reactive, watch, nextTick } from '@vue/runtime-dom';
 import cloneDeep from 'lodash-es/cloneDeep';
 import intersection from 'lodash-es/intersection';
+import isEqual from 'lodash-es/isEqual';
 import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
 import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
 import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
@@ -87,16 +88,26 @@ export interface validateOptions {
 }
 
 type namesType = string | string[];
+export interface validateInfo {
+  autoLink?: boolean;
+  required?: boolean;
+  validateStatus?: 'validating' | 'error' | 'success' | null;
+  help?: string;
+}
+
+export interface validateInfos {
+  [key: string]: validateInfo;
+}
 
 function useForm(
   modelRef: Props,
   rulesRef?: Props,
-  options?: { immediate?: boolean; deep?: boolean },
+  options?: { immediate?: boolean; deep?: boolean; validateOnRuleChange?: boolean },
 ): {
   modelRef: Props;
   rulesRef: Props;
   initialModel: Props;
-  validateInfo: Props;
+  validateInfos: validateInfos;
   resetFields: () => void;
   validate: (names?: string | string[], option?: validateOptions) => Promise<any>;
   validateField: (
@@ -105,21 +116,23 @@ function useForm(
     rules?: [Record<string, unknown>],
     option?: validateOptions,
   ) => Promise<any>;
+  mergeValidateInfo: (...items: validateInfo[]) => validateInfo;
 } {
-  const initialModel = cloneDeep(toRaw(modelRef));
-  let validateInfo = {};
+  const initialModel = cloneDeep(modelRef);
+  let validateInfos: validateInfos = {};
+
   Object.keys(initialModel).forEach(key => {
-    validateInfo[key] = {
+    validateInfos[key] = {
       autoLink: false,
       required: isRequired(rulesRef[key]),
     };
   });
-  validateInfo = reactive(validateInfo);
+  validateInfos = reactive(validateInfos);
   const resetFields = () => {
     Object.assign(modelRef, initialModel);
     nextTick(() => {
-      Object.keys(validateInfo).forEach(key => {
-        validateInfo[key] = {
+      Object.keys(validateInfos).forEach(key => {
+        validateInfos[key] = {
           autoLink: false,
           required: isRequired(rulesRef[key]),
         };
@@ -197,13 +210,13 @@ function useForm(
       },
       !!option.validateFirst,
     );
-    validateInfo[name].validateStatus = 'validating';
+    validateInfos[name].validateStatus = 'validating';
     promise
       .catch((e: any) => e)
       .then((errors = []) => {
-        if (validateInfo[name].validateStatus === 'validating') {
-          validateInfo[name].validateStatus = errors.length ? 'error' : 'success';
-          validateInfo[name].help = errors[0];
+        if (validateInfos[name].validateStatus === 'validating') {
+          validateInfos[name].validateStatus = errors.length ? 'error' : 'success';
+          validateInfos[name].help = errors[0];
         }
       });
     return promise;
@@ -221,22 +234,55 @@ function useForm(
     return validateFields(keys, option).catch((e: any) => e);
   };
 
+  const mergeValidateInfo = (...args) => {
+    const info = { autoLink: false } as validateInfo;
+    const help = [];
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i] as validateInfo;
+      if (arg.validateStatus === 'error') {
+        info.validateStatus = 'error';
+        arg.help && help.push(arg.help);
+      }
+      info.required = info.required || arg.required;
+    }
+    info.help = help.join('\n');
+    return info;
+  };
+  let oldModel = initialModel;
   watch(
-    [modelRef, rulesRef],
-    () => {
-      validate('', { trigger: 'change' });
+    modelRef,
+    model => {
+      const names = [];
+      Object.keys(model).forEach(key => {
+        if (!isEqual(model[key], oldModel[key])) {
+          names.push(key);
+        }
+      });
+      validate(names, { trigger: 'change' });
+      oldModel = cloneDeep(model);
     },
     { immediate: options && !!options.immediate, deep: true },
+  );
+
+  watch(
+    rulesRef,
+    () => {
+      if (options && options.validateOnRuleChange) {
+        validate();
+      }
+    },
+    { deep: true },
   );
 
   return {
     modelRef,
     rulesRef,
     initialModel,
-    validateInfo,
+    validateInfos,
     resetFields,
     validate,
     validateField,
+    mergeValidateInfo,
   };
 }
 
