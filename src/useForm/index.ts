@@ -99,6 +99,36 @@ export interface validateInfos {
   [key: string]: validateInfo;
 }
 
+const isArray = Array.isArray;
+const isObject = (val: any) => val !== null && typeof val === 'object';
+
+// 重置到初始数据，并尽可能的保留响应式
+function resetReactiveValue(originValue, refValues) {
+  for (const key of Object.keys(refValues)) {
+    if (!(key in originValue)) {
+      delete refValues[key];
+    }
+  }
+  for (const [key, value] of Object.entries(originValue)) {
+    const refValue = refValues[key];
+    if (isArray(value) && isArray(refValue)) {
+      if (value.length <= refValue.length) {
+        refValue.splice(value.length, refValue.length - value.length);
+      } else {
+        refValue.push(...value.slice(refValue.length));
+      }
+      value.forEach((val, index) => {
+        refValues[key][index] = resetReactiveValue(val, refValue[index]);
+      });
+    } else if (isObject(value) && isObject(refValue)) {
+      refValues[key] = resetReactiveValue(value, refValue);
+    } else {
+      refValues[key] = value;
+    }
+  }
+  return refValues;
+}
+
 function useForm(
   modelRef: Props,
   rulesRef?: Props,
@@ -129,7 +159,8 @@ function useForm(
   });
   validateInfos = reactive(validateInfos);
   const resetFields = () => {
-    Object.assign(modelRef, initialModel);
+    // Object.assign(modelRef, initialModel);
+    modelRef = resetReactiveValue(initialModel, modelRef);
     nextTick(() => {
       Object.keys(validateInfos).forEach(key => {
         validateInfos[key] = {
