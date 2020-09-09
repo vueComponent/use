@@ -231,7 +231,10 @@ function useForm(
     } else {
       keys = [names];
     }
-    return validateFields(keys, option).catch((e: any) => e);
+    const promises = validateFields(keys, option);
+    // Do not throw in console
+    promises.catch((e: any) => e);
+    return promises;
   };
 
   const mergeValidateInfo = (...args) => {
