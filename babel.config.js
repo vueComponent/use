@@ -1,25 +1,26 @@
 module.exports = {
   presets: [
     [
-      "@babel/preset-env",
+      '@babel/preset-env',
       {
         targets: {
-          node: "current",
+          node: 'current',
         },
       },
     ],
     [
-      "@babel/preset-typescript",
+      '@babel/preset-typescript',
       {
         allExtensions: true,
         isTSX: true,
       },
     ],
   ],
-  sourceType: "unambiguous",
-  sourceMaps: "inline",
+  sourceType: 'unambiguous',
+  sourceMaps: 'inline',
   plugins: [
-    "@vue/babel-plugin-jsx",
-    ["@babel/plugin-transform-typescript", { allowNamespaces: true }],
+    '@vue/babel-plugin-jsx',
+    '@babel/plugin-proposal-optional-chaining',
+    ['@babel/plugin-transform-typescript', { allowNamespaces: true }],
   ],
 };

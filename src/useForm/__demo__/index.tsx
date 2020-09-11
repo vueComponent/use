@@ -32,7 +32,7 @@ export default {
           message: 'Please input name2',
         },
       ],
-      test: [
+      'obj.test': [
         {
           required: true,
           message: 'Please select',
@@ -41,14 +41,9 @@ export default {
       ],
     });
     const { resetFields, validate, validateInfos, mergeValidateInfo } = useForm(modelRef, rulesRef);
-    const {
-      resetFields: resetObjFields,
-      validate: validateObj,
-      validateInfos: validateObjInfos,
-    } = useForm(modelRef.obj, rulesRef);
     const handleClick = e => {
       e.preventDefault();
-      Promise.all([validate(), validateObj()])
+      validate()
         .then(() => {
           console.log(toRaw(modelRef));
         })
@@ -59,7 +54,6 @@ export default {
     const handleReset = e => {
       e.preventDefault();
       resetFields();
-      resetObjFields();
     };
     return () => (
       <Form>
@@ -72,7 +66,7 @@ export default {
         <Form.Item label="Activity name2" {...validateInfos.name2}>
           <Input v-model={[modelRef.name2, 'value']} />
         </Form.Item>
-        <Form.Item label="test" {...validateObjInfos.test}>
+        <Form.Item label="test" {...validateInfos['obj.test']}>
           <Select
             v-model={[modelRef.obj.test, 'value']}
             mode="multiple"

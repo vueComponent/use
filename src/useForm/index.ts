@@ -99,34 +99,61 @@ export interface validateInfos {
   [key: string]: validateInfo;
 }
 
-const isArray = Array.isArray;
-const isObject = (val: any) => val !== null && typeof val === 'object';
+// const isArray = Array.isArray;
+// const isObject = (val: any) => val !== null && typeof val === 'object';
 
 // 重置到初始数据，并尽可能的保留响应式
-function resetReactiveValue(originValue: Props, refValues: Props) {
-  for (const key of Object.keys(refValues)) {
-    if (!(key in originValue)) {
-      delete refValues[key];
-    }
-  }
-  for (const [key, value] of Object.entries(originValue)) {
-    const refValue = refValues[key];
-    if (isArray(value) && isArray(refValue)) {
-      if (value.length <= refValue.length) {
-        refValue.splice(value.length, refValue.length - value.length);
-      } else {
-        refValue.push(...value.slice(refValue.length));
-      }
-      value.forEach((val, index) => {
-        refValues[key][index] = resetReactiveValue(val, refValue[index]);
-      });
-    } else if (isObject(value) && isObject(refValue)) {
-      refValues[key] = resetReactiveValue(value, refValue);
+// function resetReactiveValue(originValue: Props, refValues: Props) {
+//   for (const key of Object.keys(refValues)) {
+//     if (!(key in originValue)) {
+//       delete refValues[key];
+//     }
+//   }
+//   for (const [key, value] of Object.entries(originValue)) {
+//     const refValue = refValues[key];
+//     if (isArray(value) && isArray(refValue)) {
+//       if (value.length <= refValue.length) {
+//         refValue.splice(value.length, refValue.length - value.length);
+//       } else {
+//         refValue.push(...value.slice(refValue.length));
+//       }
+//       value.forEach((val, index) => {
+//         refValues[key][index] = resetReactiveValue(val, refValue[index]);
+//       });
+//     } else if (isObject(value) && isObject(refValue)) {
+//       refValues[key] = resetReactiveValue(value, refValue);
+//     } else {
+//       refValues[key] = value;
+//     }
+//   }
+//   return refValues;
+// }
+
+function getPropByPath(obj: Props, path: string, strict: boolean) {
+  let tempObj = obj;
+  path = path.replace(/\[(\w+)\]/g, '.$1');
+  path = path.replace(/^\./, '');
+
+  const keyArr = path.split('.');
+  let i = 0;
+  for (let len = keyArr.length; i < len - 1; ++i) {
+    if (!tempObj && !strict) break;
+    const key = keyArr[i];
+    if (key in tempObj) {
+      tempObj = tempObj[key];
     } else {
-      refValues[key] = value;
+      if (strict) {
+        throw new Error('please transfer a valid name path to validate!');
+      }
+      break;
     }
   }
-  return refValues;
+  return {
+    o: tempObj,
+    k: keyArr[i],
+    v: tempObj ? tempObj[keyArr[i]] : null,
+    isValid: tempObj && keyArr[i] in tempObj,
+  };
 }
 
 function useForm(
@@ -151,7 +178,7 @@ function useForm(
   const initialModel = cloneDeep(modelRef);
   let validateInfos: validateInfos = {};
 
-  Object.keys(initialModel).forEach(key => {
+  Object.keys(rulesRef).forEach(key => {
     validateInfos[key] = {
       autoLink: false,
       required: isRequired(rulesRef[key]),
@@ -159,8 +186,8 @@ function useForm(
   });
   validateInfos = reactive(validateInfos);
   const resetFields = () => {
-    // Object.assign(modelRef, initialModel);
-    modelRef = resetReactiveValue(initialModel, modelRef);
+    Object.assign(modelRef, cloneDeep(initialModel));
+    //modelRef = resetReactiveValue(initialModel, modelRef);
     nextTick(() => {
       Object.keys(validateInfos).forEach(key => {
         validateInfos[key] = {
@@ -181,16 +208,18 @@ function useForm(
     }
   };
   let lastValidatePromise = null;
-  const validateFields = (names: string[], option?: validateOptions) => {
+  const validateFields = (names: string[], option: validateOptions = {}, strict: boolean) => {
     const promiseList = [];
     const values = {};
-    names.forEach(name => {
-      const value = modelRef[name];
-      values[name] = value;
+    for (let i = 0; i < names.length; i++) {
+      const name = names[i];
+      const prop = getPropByPath(modelRef, name, strict);
+      if (!prop.isValid) continue;
+      values[name] = prop.v;
       const rules = filterRules(rulesRef[name], toArray(option && option.trigger));
       if (rules.length) {
         promiseList.push(
-          validateField(name, value, rules, option || {})
+          validateField(name, prop.v, rules, option || {})
             .then(() => ({
               name,
               errors: [],
@@ -203,7 +232,8 @@ function useForm(
             ),
         );
       }
-    });
+    }
+
     const summaryPromise = allPromiseFinish(promiseList);
     lastValidatePromise = summaryPromise;
 
@@ -255,14 +285,16 @@ function useForm(
 
   const validate = (names?: namesType, option?: validateOptions) => {
     let keys = [];
+    let strict = true;
     if (!names) {
-      keys = Object.keys(modelRef);
+      strict = false;
+      keys = Object.keys(rulesRef);
     } else if (Array.isArray(names)) {
       keys = names;
     } else {
       keys = [names];
     }
-    const promises = validateFields(keys, option);
+    const promises = validateFields(keys, option || {}, strict);
     // Do not throw in console
     promises.catch((e: any) => e);
     return promises;
@@ -273,11 +305,11 @@ function useForm(
     const help = [];
     for (let i = 0; i < args.length; i++) {
       const arg = args[i] as validateInfo;
-      if (arg.validateStatus === 'error') {
+      if (arg?.validateStatus === 'error') {
         info.validateStatus = 'error';
         arg.help && help.push(arg.help);
       }
-      info.required = info.required || arg.required;
+      info.required = info.required || arg?.required;
     }
     info.help = help.join('\n');
     return info;
