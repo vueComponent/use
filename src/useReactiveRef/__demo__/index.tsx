@@ -2,7 +2,7 @@ import { Component, ref, Ref, watchEffect } from 'vue';
 import useReactiveRef from '../index';
 export default {
   setup() {
-    const [eleRef, setEle] = useReactiveRef(true);
+    const [eleRef, setEle] = useReactiveRef();
     const flag = ref(true);
     const toggle = () => {
       flag.value = !flag.value;
