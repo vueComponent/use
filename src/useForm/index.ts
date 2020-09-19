@@ -333,8 +333,10 @@ function useForm(
   let oldModel = initialModel;
   const modelFn = (model: { [x: string]: any }) => {
     const names = [];
-    Object.keys(model).forEach(key => {
-      if (!isEqual(model[key], oldModel[key])) {
+    Object.keys(rulesRef).forEach(key => {
+      const prop = getPropByPath(model, key, false);
+      const oldProp = getPropByPath(oldModel, key, false);
+      if (!isEqual(prop.v, oldProp.v)) {
         names.push(key);
       }
     });
