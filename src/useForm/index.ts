@@ -2,9 +2,19 @@ import { reactive, watch, nextTick } from '@vue/runtime-dom';
 import cloneDeep from 'lodash-es/cloneDeep';
 import intersection from 'lodash-es/intersection';
 import isEqual from 'lodash-es/isEqual';
+import debounce from 'lodash-es/debounce';
+import omit from 'lodash-es/omit';
 import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
 import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
 import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
+
+interface DebounceSettings {
+  leading?: boolean;
+
+  wait?: number;
+
+  trailing?: boolean;
+}
 
 function isRequired(rules: any[]) {
   let isRequired = false;
@@ -159,7 +169,12 @@ function getPropByPath(obj: Props, path: string, strict: boolean) {
 function useForm(
   modelRef: Props,
   rulesRef?: Props,
-  options?: { immediate?: boolean; deep?: boolean; validateOnRuleChange?: boolean },
+  options?: {
+    immediate?: boolean;
+    deep?: boolean;
+    validateOnRuleChange?: boolean;
+    debounce?: DebounceSettings;
+  },
 ): {
   modelRef: Props;
   rulesRef: Props;
@@ -173,7 +188,7 @@ function useForm(
     rules?: [Record<string, unknown>],
     option?: validateOptions,
   ) => Promise<any>;
-  mergeValidateInfo: (...items: validateInfo[]) => validateInfo;
+  mergeValidateInfo: (items: validateInfo | validateInfo[]) => validateInfo;
 } {
   const initialModel = cloneDeep(modelRef);
   let validateInfos: validateInfos = {};
@@ -300,11 +315,12 @@ function useForm(
     return promises;
   };
 
-  const mergeValidateInfo = (...args) => {
+  const mergeValidateInfo = (items = []) => {
     const info = { autoLink: false } as validateInfo;
     const help = [];
-    for (let i = 0; i < args.length; i++) {
-      const arg = args[i] as validateInfo;
+    const infos = Array.isArray(items) ? items : [items];
+    for (let i = 0; i < infos.length; i++) {
+      const arg = infos[i] as validateInfo;
       if (arg?.validateStatus === 'error') {
         info.validateStatus = 'error';
         arg.help && help.push(arg.help);
@@ -315,18 +331,22 @@ function useForm(
     return info;
   };
   let oldModel = initialModel;
+  const modelFn = (model: { [x: string]: any }) => {
+    const names = [];
+    Object.keys(model).forEach(key => {
+      if (!isEqual(model[key], oldModel[key])) {
+        names.push(key);
+      }
+    });
+    validate(names, { trigger: 'change' });
+    oldModel = cloneDeep(model);
+  };
+  const debounceOptions = options?.debounce;
   watch(
     modelRef,
-    model => {
-      const names = [];
-      Object.keys(model).forEach(key => {
-        if (!isEqual(model[key], oldModel[key])) {
-          names.push(key);
-        }
-      });
-      validate(names, { trigger: 'change' });
-      oldModel = cloneDeep(model);
-    },
+    debounceOptions && debounceOptions.wait
+      ? debounce(modelFn, debounceOptions.wait, omit(debounceOptions, ['wait']))
+      : modelFn,
     { immediate: options && !!options.immediate, deep: true },
   );
 

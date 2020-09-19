@@ -40,7 +40,11 @@ export default {
         },
       ],
     });
-    const { resetFields, validate, validateInfos, mergeValidateInfo } = useForm(modelRef, rulesRef);
+    const { resetFields, validate, validateInfos, mergeValidateInfo } = useForm(
+      modelRef,
+      rulesRef,
+      { debounce: { wait: 300 } },
+    );
     const handleClick = e => {
       e.preventDefault();
       validate()
@@ -59,7 +63,7 @@ export default {
       <Form>
         <Form.Item
           label="Activity name1"
-          {...mergeValidateInfo(validateInfos.name1, validateInfos.name2)}
+          {...mergeValidateInfo([validateInfos.name1, validateInfos.name2])}
         >
           <Input v-model={[modelRef.name1, 'value']} onBlur={() => validate('name1')} />
         </Form.Item>
