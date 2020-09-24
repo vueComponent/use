@@ -8,7 +8,8 @@
     "jsx": "preserve",
     "esModuleInterop": true
   },
-  "include": ["./src", "./types"],
+  "include": ["./src", "./typings/"],
+  "typings": "./typings/index.d.ts",
   "exclude": [
     "node_modules",
     "build",

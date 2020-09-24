@@ -1,13 +1,6 @@
-module.exports = {
+const config = {
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        targets: {
-          node: 'current',
-        },
-      },
-    ],
+    ['@babel/preset-env', { targets: { node: 'current' } }],
     [
       '@babel/preset-typescript',
       {
@@ -16,11 +9,15 @@ module.exports = {
       },
     ],
   ],
-  sourceType: 'unambiguous',
-  sourceMaps: 'inline',
   plugins: [
     '@vue/babel-plugin-jsx',
     '@babel/plugin-proposal-optional-chaining',
     ['@babel/plugin-transform-typescript', { allowNamespaces: true }],
   ],
+};
+module.exports = {
+  env: {
+    dev: config,
+    test: config,
+  },
 };

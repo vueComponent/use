@@ -55,14 +55,18 @@ function useHover(target: Ref<HTMLElement>, options?: Options): [Ref<boolean>, A
     _removeListeners((target as Ref<HTMLElement>).value);
     destoryWatcher();
   };
-  const destoryWatcher = watch(target as Ref<HTMLElement>, (newValue, oldValue) => {
-    if (newValue) {
-      _addListeners(newValue);
-    }
-    if (oldValue) {
-      _removeListeners(oldValue);
-    }
-  });
+  const destoryWatcher = watch(
+    target as Ref<HTMLElement>,
+    (newValue, oldValue) => {
+      if (newValue) {
+        _addListeners(newValue);
+      }
+      if (oldValue) {
+        _removeListeners(oldValue);
+      }
+    },
+    { flush: 'post' },
+  );
   return [isHovering, { actions: { removelistener } }];
 }
 
