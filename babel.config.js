@@ -16,6 +16,7 @@ const config = {
   ],
 };
 module.exports = {
+  plugins: ['@babel/plugin-proposal-optional-chaining'],
   env: {
     dev: config,
     test: config,
