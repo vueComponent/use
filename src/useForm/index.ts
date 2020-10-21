@@ -180,7 +180,7 @@ function useForm(
   rulesRef: Props;
   initialModel: Props;
   validateInfos: validateInfos;
-  resetFields: () => void;
+  resetFields: (newValues?: Props) => void;
   validate: (names?: string | string[], option?: validateOptions) => Promise<any>;
   validateField: (
     name?: string,
@@ -200,8 +200,11 @@ function useForm(
     };
   });
   validateInfos = reactive(validateInfos);
-  const resetFields = () => {
-    Object.assign(modelRef, cloneDeep(initialModel));
+  const resetFields = (newValues: Props) => {
+    Object.assign(modelRef, {
+      ...cloneDeep(initialModel),
+      ...newValues,
+    });
     //modelRef = resetReactiveValue(initialModel, modelRef);
     nextTick(() => {
       Object.keys(validateInfos).forEach(key => {
