@@ -59,6 +59,12 @@ export default {
       e.preventDefault();
       resetFields();
     };
+    const handleResetWithValues = e => {
+      e.preventDefault();
+      resetFields({
+        name2: 'updated values',
+      });
+    };
     return () => (
       <Form>
         <Form.Item
@@ -93,6 +99,7 @@ export default {
         </Form.Item>
         <button onClick={handleClick}>submit</button>
         <button onClick={handleReset}>reset</button>
+        <button onClick={handleResetWithValues}>reset with new updated Values</button>
       </Form>
     );
   },
