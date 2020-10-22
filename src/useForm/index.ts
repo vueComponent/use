@@ -181,13 +181,13 @@ function useForm(
   initialModel: Props;
   validateInfos: validateInfos;
   resetFields: (newValues?: Props) => void;
-  validate: (names?: string | string[], option?: validateOptions) => Promise<any>;
-  validateField: (
+  validate: <T = any>(names?: string | string[], option?: validateOptions) => Promise<T>;
+  validateField: <T = any>(
     name?: string,
     value?: any,
     rules?: [Record<string, unknown>],
     option?: validateOptions,
-  ) => Promise<any>;
+  ) => Promise<T>;
   mergeValidateInfo: (items: validateInfo | validateInfo[]) => validateInfo;
 } {
   const initialModel = cloneDeep(modelRef);
@@ -278,7 +278,7 @@ function useForm(
 
     return returnPromise;
   };
-  const validateField = (name: string, value: any, rules: any, option: validateOptions) => {
+  const validateField = <T extends unknown = any>(name: string, value: any, rules: any, option: validateOptions): Promise<T> => {
     const promise = validateRules(
       [name],
       value,
@@ -301,7 +301,7 @@ function useForm(
     return promise;
   };
 
-  const validate = (names?: namesType, option?: validateOptions) => {
+  const validate = <T extends unknown = any>(names?: namesType, option?: validateOptions): Promise<T> => {
     let keys = [];
     let strict = true;
     if (!names) {
