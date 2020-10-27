@@ -8,4 +8,5 @@ export default [
   'useReactiveRef',
   'useScroll',
   'useInViewport',
+  'useDraggable',
 ];
