@@ -7,3 +7,4 @@ export { default as useEventListener } from './useEventListener';
 export { default as useReactiveRef } from './useReactiveRef';
 export { default as useScroll } from './useScroll';
 export { default as useInViewport } from './useInViewport';
+export { default as useDraggable } from './useDraggable';
