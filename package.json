@@ -23,7 +23,7 @@
     "prepublishOnly": "npm run lint && npm run compile && npm run test"
   },
   "dependencies": {
-    "@vue/runtime-dom": "^3.0.0-rc.1",
+    "@vue/runtime-dom": "^3.0.0",
     "async-validator": "^3.4.0",
     "lodash-es": "^4.17.15",
     "resize-observer-polyfill": "^1.5.1"
@@ -45,7 +45,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.1.0",
     "@vue/test-utils": "^2.0.0-beta.3",
-    "ant-design-vue": "^2.0.0-beta.9",
+    "ant-design-vue": "^2.0.0-0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",

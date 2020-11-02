@@ -1,9 +1,10 @@
-import { reactive, watch, nextTick } from '@vue/runtime-dom';
+import { reactive, watch, nextTick, ExtractPropTypes } from '@vue/runtime-dom';
 import cloneDeep from 'lodash-es/cloneDeep';
 import intersection from 'lodash-es/intersection';
 import isEqual from 'lodash-es/isEqual';
 import debounce from 'lodash-es/debounce';
 import omit from 'lodash-es/omit';
+import { FormItemProps as formItemProps } from 'ant-design-vue/es/form/FormItem';
 import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
 import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
 import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
@@ -15,6 +16,8 @@ interface DebounceSettings {
 
   trailing?: boolean;
 }
+
+type FormItemProps = Partial<ExtractPropTypes<typeof formItemProps>>;
 
 function isRequired(rules: any[]) {
   let isRequired = false;
@@ -101,7 +104,7 @@ type namesType = string | string[];
 export interface validateInfo {
   autoLink?: boolean;
   required?: boolean;
-  validateStatus?: 'validating' | 'error' | 'success' | null;
+  validateStatus?: FormItemProps['validateStatus'];
   help?: string;
 }
 
@@ -278,7 +281,12 @@ function useForm(
 
     return returnPromise;
   };
-  const validateField = <T extends unknown = any>(name: string, value: any, rules: any, option: validateOptions): Promise<T> => {
+  const validateField = <T extends unknown = any>(
+    name: string,
+    value: any,
+    rules: any,
+    option: validateOptions,
+  ): Promise<T> => {
     const promise = validateRules(
       [name],
       value,
@@ -301,7 +309,10 @@ function useForm(
     return promise;
   };
 
-  const validate = <T extends unknown = any>(names?: namesType, option?: validateOptions): Promise<T> => {
+  const validate = <T extends unknown = any>(
+    names?: namesType,
+    option?: validateOptions,
+  ): Promise<T> => {
     let keys = [];
     let strict = true;
     if (!names) {
