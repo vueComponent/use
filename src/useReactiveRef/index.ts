@@ -1,4 +1,4 @@
-import { ref, ComponentPublicInstance, Ref } from '@vue/runtime-dom';
+import { ref, ComponentPublicInstance, Ref } from 'vue';
 type ElementType = HTMLElement | ComponentPublicInstance;
 function useReactiveRef(): [Ref<ElementType>, (...args: any) => void] {
   let prevEle = null as ElementType | null;

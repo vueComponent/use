@@ -1,4 +1,4 @@
-import { ref, Ref } from '@vue/runtime-dom';
+import { ref, Ref } from 'vue';
 type IState = string | number | boolean | undefined;
 
 export interface Actions<T = IState> {

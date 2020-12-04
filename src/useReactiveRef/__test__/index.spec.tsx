@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
 
 import useReactiveRef from '../index';
-import { ref } from '@vue/runtime-dom';
+import { ref } from 'vue';
 
 describe('useReactiveRef', () => {
   test('should work with custom event', async () => {

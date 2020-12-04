@@ -22,7 +22,7 @@
     "prepublishOnly": "npm run lint && npm run compile && npm run test"
   },
   "dependencies": {
-    "@vue/runtime-dom": "^3.0.0",
+    "vue": "^3.0.0",
     "async-validator": "^3.4.0",
     "lodash-es": "^4.17.15",
     "resize-observer-polyfill": "^1.5.1"

@@ -1,5 +1,7 @@
-import { ComponentPublicInstance,ComponentInternalInstance } from "vue";
+import { ComponentPublicInstance, ComponentInternalInstance } from 'vue';
 export type ElementType = Element | ComponentPublicInstance;
-export function isComponentPublicInstance(instance: ElementType): instance is ComponentPublicInstance {
-    return (instance as ComponentPublicInstance).$ !== undefined
+export function isComponentPublicInstance(
+  instance: ElementType,
+): instance is ComponentPublicInstance {
+  return (instance as ComponentPublicInstance).$ !== undefined;
 }

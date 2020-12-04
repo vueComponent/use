@@ -2,7 +2,7 @@
 import { shallowMount } from '@vue/test-utils';
 
 import useEventListener from '../index';
-import { ref } from '@vue/runtime-dom';
+import { ref } from 'vue';
 
 describe('useEventListener', () => {
   test('should work with Ref<HTMLElement> parameter', async () => {

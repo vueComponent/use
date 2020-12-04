@@ -1,7 +1,7 @@
 import { mount } from '@vue/test-utils';
 
 import useClickAway from '../index';
-import { ref } from '@vue/runtime-dom';
+import { ref } from 'vue';
 
 describe('useClickAway', () => {
   test('should work with custom funtion', async () => {

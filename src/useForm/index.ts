@@ -1,4 +1,4 @@
-import { reactive, watch, nextTick, ExtractPropTypes } from '@vue/runtime-dom';
+import { reactive, watch, nextTick, ExtractPropTypes } from 'vue';
 import cloneDeep from 'lodash-es/cloneDeep';
 import intersection from 'lodash-es/intersection';
 import isEqual from 'lodash-es/isEqual';

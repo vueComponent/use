@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { shallowMount } from '@vue/test-utils';
 import useHover from '../index';
-import { ref } from '@vue/runtime-dom';
+import { ref } from 'vue';
 
 describe('useHover', () => {
   test('should work with custom event', async () => {
