@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // i need use
-import { onMounted, reactive, readonly as vueReadOnly } from 'vue';
+import { onMounted, reactive, readonly } from 'vue';
 import { defaultTableProps } from 'ant-design-vue/es/table/Table';
 
 interface tableState {
   loading: boolean;
-  dataSource: any[];
+  dataSource: any;
   rowKey: string;
   pagination: any;
-  onChange(): typeof defaultTableProps.onChange;
+  onChange(): any;
 }
 
 interface useTableReturn {
@@ -18,7 +18,7 @@ interface useTableReturn {
   resetTable: () => void;
   setTableSource: (dataSource: any[]) => void;
   setTableTotal: (total: number) => any;
-  // tableState: reactive<HTMLElement>;
+  tableState: tableState;
 }
 
 interface useTableConfig {
@@ -58,7 +58,9 @@ function useTable({ config = {}, pagination = {}, getDataFn }: useTableArg = {})
     showTotal: (total, range) => `共 ${total} 条记录 第 ${range[0]} -${range[1]} 条`,
   };
 
-  function change({ current, pageSize }, filters = {}, { field = null, order = null } = {}) {
+  function change(pag, filters, sort): void {
+    const { current, pageSize } = pag ?? {};
+    const { field = null, order = null } = sort ?? {};
     const sortType = order?.slice(0, order.length - 3) ?? null;
     const backOne = [
       tableState.pagination.pageSize !== pageSize,
@@ -139,7 +141,6 @@ function useTable({ config = {}, pagination = {}, getDataFn }: useTableArg = {})
     setTableSource(source);
     setTableTotal(total);
   }
-
   return {
     setPageSize,
     searchTable,
@@ -147,7 +148,8 @@ function useTable({ config = {}, pagination = {}, getDataFn }: useTableArg = {})
     setTableSource,
     setTableTotal,
     setSourceAndTotal,
-    // tableState: vueReadOnly(tableState),
+    // @ts-ignore default function
+    tableState: readonly(tableState),
   };
 }
 
