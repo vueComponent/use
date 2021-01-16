@@ -112,36 +112,6 @@ export interface validateInfos {
   [key: string]: validateInfo;
 }
 
-// const isArray = Array.isArray;
-// const isObject = (val: any) => val !== null && typeof val === 'object';
-
-// 重置到初始数据，并尽可能的保留响应式
-// function resetReactiveValue(originValue: Props, refValues: Props) {
-//   for (const key of Object.keys(refValues)) {
-//     if (!(key in originValue)) {
-//       delete refValues[key];
-//     }
-//   }
-//   for (const [key, value] of Object.entries(originValue)) {
-//     const refValue = refValues[key];
-//     if (isArray(value) && isArray(refValue)) {
-//       if (value.length <= refValue.length) {
-//         refValue.splice(value.length, refValue.length - value.length);
-//       } else {
-//         refValue.push(...value.slice(refValue.length));
-//       }
-//       value.forEach((val, index) => {
-//         refValues[key][index] = resetReactiveValue(val, refValue[index]);
-//       });
-//     } else if (isObject(value) && isObject(refValue)) {
-//       refValues[key] = resetReactiveValue(value, refValue);
-//     } else {
-//       refValues[key] = value;
-//     }
-//   }
-//   return refValues;
-// }
-
 function getPropByPath(obj: Props, path: string, strict: boolean) {
   let tempObj = obj;
   path = path.replace(/\[(\w+)\]/g, '.$1');
@@ -184,7 +154,7 @@ function useForm(
   initialModel: Props;
   validateInfos: validateInfos;
   resetFields: (newValues?: Props) => void;
-  validate: <T = any>(names?: string | string[], option?: validateOptions) => Promise<T>;
+  validate: <T = any>(names?: namesType, option?: validateOptions) => Promise<T>;
   validateField: <T = any>(
     name?: string,
     value?: any,
@@ -192,6 +162,7 @@ function useForm(
     option?: validateOptions,
   ) => Promise<T>;
   mergeValidateInfo: (items: validateInfo | validateInfo[]) => validateInfo;
+  clearValidate: (names?: namesType) => void;
 } {
   const initialModel = cloneDeep(modelRef);
   let validateInfos: validateInfos = {};
@@ -329,6 +300,24 @@ function useForm(
     return promises;
   };
 
+  const clearValidate = (names?: namesType) => {
+    let keys = [];
+    if (!names) {
+      keys = Object.keys(rulesRef);
+    } else if (Array.isArray(names)) {
+      keys = names;
+    } else {
+      keys = [names];
+    }
+    keys.forEach(key => {
+      validateInfos[key] &&
+        Object.assign(validateInfos[key], {
+          validateStatus: '',
+          help: '',
+        });
+    });
+  };
+
   const mergeValidateInfo = (items = []) => {
     const info = { autoLink: false } as validateInfo;
     const help = [];
@@ -385,6 +374,7 @@ function useForm(
     validate,
     validateField,
     mergeValidateInfo,
+    clearValidate,
   };
 }
 

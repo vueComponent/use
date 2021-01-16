@@ -40,7 +40,7 @@ export default {
         },
       ],
     });
-    const { resetFields, validate, validateInfos, mergeValidateInfo } = useForm(
+    const { resetFields, validate, validateInfos, mergeValidateInfo, clearValidate } = useForm(
       modelRef,
       rulesRef,
       { debounce: { wait: 300 } },
@@ -58,6 +58,12 @@ export default {
     const handleReset = e => {
       e.preventDefault();
       resetFields();
+    };
+    const clearValidateAll = () => {
+      clearValidate();
+    };
+    const clearValidateName1 = (name) => {
+      clearValidate(name);
     };
     const handleResetWithValues = e => {
       e.preventDefault();
@@ -100,6 +106,9 @@ export default {
         <button onClick={handleClick}>submit</button>
         <button onClick={handleReset}>reset</button>
         <button onClick={handleResetWithValues}>reset with new updated Values</button>
+        <button onClick={handleReset}>reset</button>
+        <button onClick={clearValidateAll}>clearValidateAll</button>
+        <button onClick={()=>clearValidateName1('name1')}>clearValidateName1</button>
       </Form>
     );
   },
