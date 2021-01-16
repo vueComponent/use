@@ -1,4 +1,4 @@
-import { ComponentPublicInstance, ComponentInternalInstance } from 'vue';
+import { ComponentPublicInstance } from 'vue';
 export type ElementType = Element | ComponentPublicInstance;
 export function isComponentPublicInstance(
   instance: ElementType,

@@ -183,7 +183,6 @@ describe('limit in viewport', async () => {
     const { drag, wrapper } = await utils;
     const targetElement = wrapper.find('#main').element as HTMLElement;
     targetElement.style.right = '50px';
-    const rect = targetElement.getBoundingClientRect();
     const startAt = { clientX: 5, clientY: 5 };
     const delta = { x: 15, y: 1 };
 
@@ -294,8 +293,8 @@ describe('reset drags', () => {
 
 describe('useDraggable', () => {
   test('starting drag', async () => {
-    const [targetRef, handleRef, { delta }] = useDraggable({ controlStyle: true });
-    const wrapper = mount({
+    const [targetRef] = useDraggable({ controlStyle: true });
+    mount({
       setup() {
         targetRef;
         return { targetRef };
