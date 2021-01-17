@@ -94,18 +94,18 @@ export default {
           >
             <Select.Option value="china">
               <div>
-              <span role="img" aria-label="China">
-                🇨🇳
-              </span>
-              China (中国)
+                <span role="img" aria-label="China">
+                  🇨🇳
+                </span>
+                China (中国)
               </div>
             </Select.Option>
             <Select.Option value="usa">
               <div>
-              <span role="img" aria-label="USA">
-                🇺🇸
-              </span>
-              USA (美国)
+                <span role="img" aria-label="USA">
+                  🇺🇸
+                </span>
+                USA (美国)
               </div>
             </Select.Option>
           </Select>
