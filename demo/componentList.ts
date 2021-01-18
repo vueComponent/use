@@ -9,4 +9,5 @@ export default [
   'useScroll',
   'useInViewport',
   'useDraggable',
+  'useTable',
 ];
