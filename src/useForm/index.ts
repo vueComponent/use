@@ -1,13 +1,13 @@
-import { reactive, watch, nextTick, ExtractPropTypes } from 'vue';
+import { reactive, watch, nextTick } from 'vue';
 import cloneDeep from 'lodash-es/cloneDeep';
 import intersection from 'lodash-es/intersection';
 import isEqual from 'lodash-es/isEqual';
 import debounce from 'lodash-es/debounce';
 import omit from 'lodash-es/omit';
-import { FormItemProps as formItemProps } from 'ant-design-vue/es/form/FormItem';
 import { validateRules } from 'ant-design-vue/es/form/utils/validateUtil';
 import { defaultValidateMessages } from 'ant-design-vue/es/form/utils/messages';
 import { allPromiseFinish } from 'ant-design-vue/es/form/utils/asyncUtil';
+import { tuple } from 'ant-design-vue/es/_util/type';
 
 interface DebounceSettings {
   leading?: boolean;
@@ -16,8 +16,6 @@ interface DebounceSettings {
 
   trailing?: boolean;
 }
-
-type FormItemProps = Partial<ExtractPropTypes<typeof formItemProps>>;
 
 function isRequired(rules: any[]) {
   let isRequired = false;
@@ -100,11 +98,14 @@ export interface validateOptions {
   trigger?: 'change' | 'blur' | string | string[];
 }
 
+const validateStatus = tuple('', 'success', 'warning', 'error', 'validating')
+export type ValidateStatus = typeof validateStatus[number];
+
 type namesType = string | string[];
 export interface validateInfo {
   autoLink?: boolean;
   required?: boolean;
-  validateStatus?: FormItemProps['validateStatus'];
+  validateStatus?: ValidateStatus;
   help?: string;
 }
 
