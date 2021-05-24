@@ -98,7 +98,7 @@ export interface validateOptions {
   trigger?: 'change' | 'blur' | string | string[];
 }
 
-const validateStatus = tuple('', 'success', 'warning', 'error', 'validating')
+const validateStatus = tuple('', 'success', 'warning', 'error', 'validating');
 export type ValidateStatus = typeof validateStatus[number];
 
 type namesType = string | string[];

@@ -22,17 +22,17 @@
     "prepublishOnly": "npm run lint && npm run compile && npm run test"
   },
   "dependencies": {
-    "vue": "^3.0.0",
     "async-validator": "^3.4.0",
     "lodash-es": "^4.17.15",
-    "resize-observer-polyfill": "^1.5.1"
+    "resize-observer-polyfill": "^1.5.1",
+    "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@babel/runtime": "^7.10.4",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-transform-typescript": "^7.10.3",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
+    "@babel/runtime": "^7.10.4",
     "@types/jest": "^26.0.3",
     "@types/lodash-es": "^4.17.3",
     "@typescript-eslint/eslint-plugin": "^4.13.0",
@@ -44,7 +44,7 @@
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^7.0.0",
     "@vue/test-utils": "^2.0.0-beta.3",
-    "ant-design-vue": "^2.0.0-0",
+    "ant-design-vue": "^2.0.0",
     "babel-jest": "^26.1.0",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.4.2",
