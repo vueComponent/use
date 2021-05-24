@@ -6,7 +6,8 @@
     "target": "esnext",
     "moduleResolution": "node",
     "jsx": "preserve",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   },
   "include": ["./src", "./typings/"],
   "typings": "./typings/index.d.ts",
