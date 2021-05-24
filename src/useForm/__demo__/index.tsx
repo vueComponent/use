@@ -40,34 +40,32 @@ export default {
         },
       ],
     });
-    const {
-      resetFields,
-      validate,
-      validateInfos,
-      mergeValidateInfo,
-      clearValidate,
-    } = useForm(modelRef, rulesRef, { debounce: { wait: 300 } });
-    const handleClick = e => {
+    const { resetFields, validate, validateInfos, mergeValidateInfo, clearValidate } = useForm(
+      modelRef,
+      rulesRef,
+      { debounce: { wait: 300 } },
+    );
+    const handleClick = (e) => {
       e.preventDefault();
       validate()
         .then(() => {
           console.log(toRaw(modelRef));
         })
-        .catch(err => {
+        .catch((err) => {
           console.log('error', err);
         });
     };
-    const handleReset = e => {
+    const handleReset = (e) => {
       e.preventDefault();
       resetFields();
     };
     const clearValidateAll = () => {
       clearValidate();
     };
-    const clearValidateName1 = name => {
+    const clearValidateName1 = (name) => {
       clearValidate(name);
     };
-    const handleResetWithValues = e => {
+    const handleResetWithValues = (e) => {
       e.preventDefault();
       resetFields({
         name2: 'updated values',

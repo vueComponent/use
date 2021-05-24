@@ -168,7 +168,7 @@ function useForm(
   const initialModel = cloneDeep(modelRef);
   let validateInfos: validateInfos = {};
 
-  Object.keys(rulesRef).forEach(key => {
+  Object.keys(rulesRef).forEach((key) => {
     validateInfos[key] = {
       autoLink: false,
       required: isRequired(rulesRef[key]),
@@ -182,7 +182,7 @@ function useForm(
     });
     //modelRef = resetReactiveValue(initialModel, modelRef);
     nextTick(() => {
-      Object.keys(validateInfos).forEach(key => {
+      Object.keys(validateInfos).forEach((key) => {
         validateInfos[key] = {
           autoLink: false,
           required: isRequired(rulesRef[key]),
@@ -194,7 +194,7 @@ function useForm(
     if (!trigger.length) {
       return rules;
     } else {
-      return rules.filter(rule => {
+      return rules.filter((rule) => {
         const triggerList = toArray(rule.trigger || 'change');
         return intersection(triggerList, trigger).length;
       });
@@ -310,7 +310,7 @@ function useForm(
     } else {
       keys = [names];
     }
-    keys.forEach(key => {
+    keys.forEach((key) => {
       validateInfos[key] &&
         Object.assign(validateInfos[key], {
           validateStatus: '',
@@ -337,7 +337,7 @@ function useForm(
   let oldModel = initialModel;
   const modelFn = (model: { [x: string]: any }) => {
     const names = [];
-    Object.keys(rulesRef).forEach(key => {
+    Object.keys(rulesRef).forEach((key) => {
       const prop = getPropByPath(model, key, false);
       const oldProp = getPropByPath(oldModel, key, false);
       if (!isEqual(prop.v, oldProp.v)) {

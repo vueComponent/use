@@ -16,8 +16,8 @@ function useSize(target?: Ref<Element | Window | null>): [Size, Ref] {
       (el, preElm, onInvalidate) => {
         if (!el) return;
         resizeObserver && resizeObserver.disconnect();
-        resizeObserver = new ResizeObserver(entries => {
-          entries.forEach(entry => {
+        resizeObserver = new ResizeObserver((entries) => {
+          entries.forEach((entry) => {
             state.width = entry.target.clientWidth;
             state.height = entry.target.clientHeight;
           });

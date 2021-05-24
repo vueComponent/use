@@ -3,7 +3,7 @@ import { ref, Ref, watchEffect } from 'vue';
 function useInViewport(target: Ref<HTMLElement>): Ref<boolean> | Ref<null> {
   const inViewPort = ref(null);
   let prevEl = null;
-  const observer = new IntersectionObserver(entries => {
+  const observer = new IntersectionObserver((entries) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         inViewPort.value = true;

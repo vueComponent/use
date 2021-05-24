@@ -10,7 +10,7 @@ export default {
       setRight,
     };
   },
-  render: _ctx => {
+  render: (_ctx) => {
     return (
       <div>
         <p>Effects：{_ctx.toggleRef.toString()}</p>

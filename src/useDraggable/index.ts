@@ -107,7 +107,7 @@ export default function useDraggable(
     () => {
       const handle = handleEleRef.value || targetEleRef.value;
       if (!targetEleRef.value) return;
-      const reposition = function(event) {
+      const reposition = function (event) {
         const source =
           (event.changedTouches && event.changedTouches[0]) ||
           (event.touches && event.touches[0]) ||

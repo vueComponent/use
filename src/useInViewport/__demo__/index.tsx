@@ -6,7 +6,7 @@ export default {
     const inViewPort = useInViewport(ele);
     return { ele, inViewPort };
   },
-  render: _ctx => (
+  render: (_ctx) => (
     <div>
       <div ref="ele">observer dom</div>
       <div style={{ marginTop: 70, color: _ctx.inViewPort ? '#87d068' : '#f50' }}>
