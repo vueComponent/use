@@ -1,3 +1,7 @@
+# 该项目已废弃， useForm 已集成进入 ant-design-vue 中
+# The project has been abandoned, useForm has been integrated into `ant-design-vue`
+
+
 # @ant-design-vue/use
 
 Vue 3 Composition Api Library.
